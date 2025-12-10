@@ -1,33 +1,39 @@
 fn main(){
     println!("Exp 1: Basic Shadowing");
     let x = 5;
-    println!("x (outer) = {} at {:p}", x, &x);
+    println!("x  = {} at {:p}", x, &x);
 
     {
+        //inner block
         let x = 10;
-        println!("x (inner block) = {} at {:p}", x, &x);
+        println!("x  = {} at {:p}", x, &x);
+        //shadow with different type
         let x = "hello";
-        println!("x (shadowed) = {} at {:p}", x, &x);
+        println!("x  = {} at {:p}", x, &x);
     }
-    println!("x (returns to outer) = {} at {:p}", x, &x);
+    println!("x  = {} at {:p}", x, &x);
+    
     println!("\n Exp 2: Shadowing with heap allocation");
     let s = String::from("stack");
-    println!("s (the string on the heap) = {} at {:p}, data at {:p}", s, &s, s.as_ptr());
+    //string on heap
+    println!("s  = {} at {:p}, data at {:p}", s, &s, s.as_ptr());
     {
+        //inner
         let s = String::from("inner");
-        println!("s (the inner string) = {} at {:p}, data at {:p}", s, &s, s.as_ptr());
+        println!("s  = {} at {:p}, data at {:p}", s, &s, s.as_ptr());
     }
-
-    println!("s (the outer string) = {} at {:p}, data at {:p}", s, &s, s.as_ptr());
+    //restoring outer string
+    println!("s = {} at {:p}, data at {:p}", s, &s, s.as_ptr());
     println!("\n Exp 3: Shadow v Mutation");
-
+    //mutation
     let mut y = 5;
-    println!("y (mutable) = {} at {:p}", y, &y);
+    println!("y  = {} at {:p}", y, &y);
     y = 10;
-    println!("y (after the mutation) = {} at {:p}", y, &y);
-
+    //mutation happens
+    println!("y  = {} at {:p}", y, &y);
+    //shadow and 
     let y = 20;
-    println!("y (shadowed and imutable) = {} at {:p}", y, &y);
+    println!("y = {} at {:p}", y, &y);
 
     println!("\nExp 4: multiple shadows with the same scope");
     let z = 1;
