@@ -1,9 +1,9 @@
 ; ModuleID = 'oob_dyn.c'
 source_filename = "oob_dyn.c"
-target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
-target triple = "x86_64-unknown-linux-gnu"
+target datalayout = "e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-n32:64-S128-Fn32"
+target triple = "arm64-apple-macosx14.0.0"
 
-@__const.main.arr = private unnamed_addr constant [5 x i32] [i32 10, i32 20, i32 30, i32 40, i32 50], align 16
+@__const.main.arr = private unnamed_addr constant [5 x i32] [i32 10, i32 20, i32 30, i32 40, i32 50], align 4
 @.str = private unnamed_addr constant [12 x i8] c"Elements: \0A\00", align 1, !dbg !0
 @.str.1 = private unnamed_addr constant [14 x i8] c"arr[%d] = %d\0A\00", align 1, !dbg !7
 @.str.2 = private unnamed_addr constant [18 x i8] c"\0AEnter an index: \00", align 1, !dbg !12
@@ -11,66 +11,65 @@ target triple = "x86_64-unknown-linux-gnu"
 @.str.4 = private unnamed_addr constant [16 x i8] c"Enter a value: \00", align 1, !dbg !22
 @.str.5 = private unnamed_addr constant [21 x i8] c"write, arr[%d] = %d\0A\00", align 1, !dbg !27
 
-; Function Attrs: noinline nounwind optnone uwtable
-define dso_local i32 @main() #0 !dbg !42 {
-entry:
-  %retval = alloca i32, align 4
-  %arr = alloca [5 x i32], align 16
-  %index = alloca i32, align 4
-  %i = alloca i32, align 4
-  %value = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-    #dbg_declare(ptr %arr, !47, !DIExpression(), !51)
-  call void @llvm.memcpy.p0.p0.i64(ptr align 16 %arr, ptr align 16 @__const.main.arr, i64 20, i1 false), !dbg !51
-    #dbg_declare(ptr %index, !52, !DIExpression(), !53)
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str), !dbg !54
-    #dbg_declare(ptr %i, !55, !DIExpression(), !57)
-  store i32 0, ptr %i, align 4, !dbg !57
-  br label %for.cond, !dbg !58
+; Function Attrs: noinline nounwind optnone ssp uwtable(sync)
+define i32 @main() #0 !dbg !42 {
+  %1 = alloca i32, align 4
+  %2 = alloca [5 x i32], align 4
+  %3 = alloca i32, align 4
+  %4 = alloca i32, align 4
+  %5 = alloca i32, align 4
+  store i32 0, ptr %1, align 4
+    #dbg_declare(ptr %2, !47, !DIExpression(), !51)
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %2, ptr align 4 @__const.main.arr, i64 20, i1 false), !dbg !51
+    #dbg_declare(ptr %3, !52, !DIExpression(), !53)
+  %6 = call i32 (ptr, ...) @printf(ptr noundef @.str), !dbg !54
+    #dbg_declare(ptr %4, !55, !DIExpression(), !57)
+  store i32 0, ptr %4, align 4, !dbg !57
+  br label %7, !dbg !58
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %i, align 4, !dbg !59
-  %cmp = icmp slt i32 %0, 5, !dbg !61
-  br i1 %cmp, label %for.body, label %for.end, !dbg !62
+7:                                                ; preds = %17, %0
+  %8 = load i32, ptr %4, align 4, !dbg !59
+  %9 = icmp slt i32 %8, 5, !dbg !61
+  br i1 %9, label %10, label %20, !dbg !62
 
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr %i, align 4, !dbg !63
-  %2 = load i32, ptr %i, align 4, !dbg !65
-  %idxprom = sext i32 %2 to i64, !dbg !66
-  %arrayidx = getelementptr inbounds [5 x i32], ptr %arr, i64 0, i64 %idxprom, !dbg !66
-  %3 = load i32, ptr %arrayidx, align 4, !dbg !66
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %1, i32 noundef %3), !dbg !67
-  br label %for.inc, !dbg !68
+10:                                               ; preds = %7
+  %11 = load i32, ptr %4, align 4, !dbg !63
+  %12 = load i32, ptr %4, align 4, !dbg !65
+  %13 = sext i32 %12 to i64, !dbg !66
+  %14 = getelementptr inbounds [5 x i32], ptr %2, i64 0, i64 %13, !dbg !66
+  %15 = load i32, ptr %14, align 4, !dbg !66
+  %16 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %11, i32 noundef %15), !dbg !67
+  br label %17, !dbg !68
 
-for.inc:                                          ; preds = %for.body
-  %4 = load i32, ptr %i, align 4, !dbg !69
-  %inc = add nsw i32 %4, 1, !dbg !69
-  store i32 %inc, ptr %i, align 4, !dbg !69
-  br label %for.cond, !dbg !70, !llvm.loop !71
+17:                                               ; preds = %10
+  %18 = load i32, ptr %4, align 4, !dbg !69
+  %19 = add nsw i32 %18, 1, !dbg !69
+  store i32 %19, ptr %4, align 4, !dbg !69
+  br label %7, !dbg !70, !llvm.loop !71
 
-for.end:                                          ; preds = %for.cond
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.2), !dbg !74
-  %call3 = call i32 (ptr, ...) @__isoc99_scanf(ptr noundef @.str.3, ptr noundef %index), !dbg !75
-  %5 = load i32, ptr %index, align 4, !dbg !76
-  %6 = load i32, ptr %index, align 4, !dbg !77
-  %idxprom4 = sext i32 %6 to i64, !dbg !78
-  %arrayidx5 = getelementptr inbounds [5 x i32], ptr %arr, i64 0, i64 %idxprom4, !dbg !78
-  %7 = load i32, ptr %arrayidx5, align 4, !dbg !78
-  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %5, i32 noundef %7), !dbg !79
-  %call7 = call i32 (ptr, ...) @printf(ptr noundef @.str.4), !dbg !80
-    #dbg_declare(ptr %value, !81, !DIExpression(), !82)
-  %call8 = call i32 (ptr, ...) @__isoc99_scanf(ptr noundef @.str.3, ptr noundef %value), !dbg !83
-  %8 = load i32, ptr %value, align 4, !dbg !84
-  %9 = load i32, ptr %index, align 4, !dbg !85
-  %idxprom9 = sext i32 %9 to i64, !dbg !86
-  %arrayidx10 = getelementptr inbounds [5 x i32], ptr %arr, i64 0, i64 %idxprom9, !dbg !86
-  store i32 %8, ptr %arrayidx10, align 4, !dbg !87
-  %10 = load i32, ptr %index, align 4, !dbg !88
-  %11 = load i32, ptr %index, align 4, !dbg !89
-  %idxprom11 = sext i32 %11 to i64, !dbg !90
-  %arrayidx12 = getelementptr inbounds [5 x i32], ptr %arr, i64 0, i64 %idxprom11, !dbg !90
-  %12 = load i32, ptr %arrayidx12, align 4, !dbg !90
-  %call13 = call i32 (ptr, ...) @printf(ptr noundef @.str.5, i32 noundef %10, i32 noundef %12), !dbg !91
+20:                                               ; preds = %7
+  %21 = call i32 (ptr, ...) @printf(ptr noundef @.str.2), !dbg !74
+  %22 = call i32 (ptr, ...) @scanf(ptr noundef @.str.3, ptr noundef %3), !dbg !75
+  %23 = load i32, ptr %3, align 4, !dbg !76
+  %24 = load i32, ptr %3, align 4, !dbg !77
+  %25 = sext i32 %24 to i64, !dbg !78
+  %26 = getelementptr inbounds [5 x i32], ptr %2, i64 0, i64 %25, !dbg !78
+  %27 = load i32, ptr %26, align 4, !dbg !78
+  %28 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %23, i32 noundef %27), !dbg !79
+  %29 = call i32 (ptr, ...) @printf(ptr noundef @.str.4), !dbg !80
+    #dbg_declare(ptr %5, !81, !DIExpression(), !82)
+  %30 = call i32 (ptr, ...) @scanf(ptr noundef @.str.3, ptr noundef %5), !dbg !83
+  %31 = load i32, ptr %5, align 4, !dbg !84
+  %32 = load i32, ptr %3, align 4, !dbg !85
+  %33 = sext i32 %32 to i64, !dbg !86
+  %34 = getelementptr inbounds [5 x i32], ptr %2, i64 0, i64 %33, !dbg !86
+  store i32 %31, ptr %34, align 4, !dbg !87
+  %35 = load i32, ptr %3, align 4, !dbg !88
+  %36 = load i32, ptr %3, align 4, !dbg !89
+  %37 = sext i32 %36 to i64, !dbg !90
+  %38 = getelementptr inbounds [5 x i32], ptr %2, i64 0, i64 %37, !dbg !90
+  %39 = load i32, ptr %38, align 4, !dbg !90
+  %40 = call i32 (ptr, ...) @printf(ptr noundef @.str.5, i32 noundef %35, i32 noundef %39), !dbg !91
   ret i32 0, !dbg !92
 }
 
@@ -79,19 +78,19 @@ declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr no
 
 declare i32 @printf(ptr noundef, ...) #2
 
-declare i32 @__isoc99_scanf(ptr noundef, ...) #2
+declare i32 @scanf(ptr noundef, ...) #2
 
-attributes #0 = { noinline nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { noinline nounwind optnone ssp uwtable(sync) "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="apple-m1" "target-features"="+aes,+altnzcv,+ccdp,+ccidx,+ccpp,+complxnum,+crc,+dit,+dotprod,+flagm,+fp-armv8,+fp16fml,+fptoint,+fullfp16,+jsconv,+lse,+neon,+pauth,+perfmon,+predres,+ras,+rcpc,+rdm,+sb,+sha2,+sha3,+specrestrict,+ssbs,+v8.1a,+v8.2a,+v8.3a,+v8.4a,+v8a" }
 attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="apple-m1" "target-features"="+aes,+altnzcv,+ccdp,+ccidx,+ccpp,+complxnum,+crc,+dit,+dotprod,+flagm,+fp-armv8,+fp16fml,+fptoint,+fullfp16,+jsconv,+lse,+neon,+pauth,+perfmon,+predres,+ras,+rcpc,+rdm,+sb,+sha2,+sha3,+specrestrict,+ssbs,+v8.1a,+v8.2a,+v8.3a,+v8.4a,+v8a" }
 
-!llvm.dbg.cu = !{!32}
-!llvm.module.flags = !{!34, !35, !36, !37, !38, !39, !40}
+!llvm.module.flags = !{!32, !33, !34, !35, !36, !37, !38}
+!llvm.dbg.cu = !{!39}
 !llvm.ident = !{!41}
 
 !0 = !DIGlobalVariableExpression(var: !1, expr: !DIExpression())
 !1 = distinct !DIGlobalVariable(scope: null, file: !2, line: 6, type: !3, isLocal: true, isDefinition: true)
-!2 = !DIFile(filename: "oob_dyn.c", directory: "/root/CSC429/Lab3", checksumkind: CSK_MD5, checksum: "7ee9a0027cfd00391627c2435b47d924")
+!2 = !DIFile(filename: "oob_dyn.c", directory: "/Users/stevenortiz/Lab3/lab3")
 !3 = !DICompositeType(tag: DW_TAG_array_type, baseType: !4, size: 96, elements: !5)
 !4 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
 !5 = !{!6}
@@ -121,17 +120,17 @@ attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !29 = !DICompositeType(tag: DW_TAG_array_type, baseType: !4, size: 168, elements: !30)
 !30 = !{!31}
 !31 = !DISubrange(count: 21)
-!32 = distinct !DICompileUnit(language: DW_LANG_C11, file: !2, producer: "clang version 22.0.0git (https://github.com/llvm/llvm-project.git 48a6f2f85c8269d8326c185016801a4eb8d5dfd6)", isOptimized: false, runtimeVersion: 0, emissionKind: FullDebug, globals: !33, splitDebugInlining: false, nameTableKind: None)
-!33 = !{!0, !7, !12, !17, !22, !27}
-!34 = !{i32 7, !"Dwarf Version", i32 5}
-!35 = !{i32 2, !"Debug Info Version", i32 3}
-!36 = !{i32 1, !"wchar_size", i32 4}
-!37 = !{i32 8, !"PIC Level", i32 2}
-!38 = !{i32 7, !"PIE Level", i32 2}
-!39 = !{i32 7, !"uwtable", i32 2}
-!40 = !{i32 7, !"frame-pointer", i32 2}
-!41 = !{!"clang version 22.0.0git (https://github.com/llvm/llvm-project.git 48a6f2f85c8269d8326c185016801a4eb8d5dfd6)"}
-!42 = distinct !DISubprogram(name: "main", scope: !2, file: !2, line: 3, type: !43, scopeLine: 3, spFlags: DISPFlagDefinition, unit: !32, retainedNodes: !46)
+!32 = !{i32 2, !"SDK Version", [2 x i32] [i32 14, i32 4]}
+!33 = !{i32 7, !"Dwarf Version", i32 4}
+!34 = !{i32 2, !"Debug Info Version", i32 3}
+!35 = !{i32 1, !"wchar_size", i32 4}
+!36 = !{i32 8, !"PIC Level", i32 2}
+!37 = !{i32 7, !"uwtable", i32 1}
+!38 = !{i32 7, !"frame-pointer", i32 1}
+!39 = distinct !DICompileUnit(language: DW_LANG_C11, file: !2, producer: "Homebrew clang version 21.1.5", isOptimized: false, runtimeVersion: 0, emissionKind: FullDebug, globals: !40, splitDebugInlining: false, nameTableKind: Apple, sysroot: "/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk", sdk: "MacOSX14.sdk")
+!40 = !{!0, !7, !12, !17, !22, !27}
+!41 = !{!"Homebrew clang version 21.1.5"}
+!42 = distinct !DISubprogram(name: "main", scope: !2, file: !2, line: 3, type: !43, scopeLine: 3, spFlags: DISPFlagDefinition, unit: !39, retainedNodes: !46)
 !43 = !DISubroutineType(types: !44)
 !44 = !{!45}
 !45 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
