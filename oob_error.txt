@@ -1,0 +1,22 @@
+error: statements are terminated with a semicolon
+ --> oob.rs:8:49
+  |
+8 |     println!("\nHardcoded OOB attempt access: "):
+  |                                                 ^
+  |
+help: use a semicolon instead
+  |
+8 -     println!("\nHardcoded OOB attempt access: "):
+8 +     println!("\nHardcoded OOB attempt access: ");
+  |
+
+error: this operation will panic at runtime
+ --> oob.rs:9:30
+  |
+9 |     println!("arr[10] = {}", arr[10]);
+  |                              ^^^^^^^ index out of bounds: the length is 5 but the index is 10
+  |
+  = note: `#[deny(unconditional_panic)]` on by default
+
+error: aborting due to 2 previous errors
+
